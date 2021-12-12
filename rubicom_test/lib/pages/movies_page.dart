@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:rubicom_test/movies_get10.dart';
-import 'package:rubicom_test/view_data.dart';
-import 'movies_get10.dart';
+import 'package:rubicom_test/services/parse_data.dart';
+import 'package:rubicom_test/pages/view_data.dart';
+import '../services/parse_data.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -18,7 +18,7 @@ class MoviesPage extends StatefulWidget {
 class _MoviesPageState extends State<MoviesPage> {
 
 
-  late Future<MoviesGet> moviesData;
+  late Future<ParseData> moviesData;
 
   @override
   void initState() {
@@ -30,18 +30,13 @@ class _MoviesPageState extends State<MoviesPage> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: FutureBuilder<MoviesGet>(
+        child: FutureBuilder<ParseData>(
           future: fetchData(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if(widget.searchValue.length >= 3){
-                print(snapshot.data!.result[0]['title']);
-                print(snapshot.data!.result[0]['title'].toLowerCase().contains(widget.searchValue.toLowerCase()));
-              }
               final children = <Widget>[];
               for (var i = 0; i < 10; i++) {
                 int rang = i+1;
-
                 if(widget.searchValue.length >=3){
                   if(snapshot.data!.result[i]['title'].toLowerCase().contains(widget.searchValue.toLowerCase())){
                     children.add(ListTile(
@@ -102,22 +97,9 @@ class _MoviesPageState extends State<MoviesPage> {
   }
 }
 
-Future<MoviesGet> fetchData() async {
+Future<ParseData> fetchData() async {
   const _key = '4cb43616f0d02a7feb600c5ab9098e8d';
   final response = await http.get(Uri.parse(
       'https://api.themoviedb.org/3/movie/top_rated?api_key=$_key&language=en-US&page=1'));
-  return MoviesGet.fromJson(jsonDecode(response.body));
+  return ParseData.fromJson(jsonDecode(response.body));
 }
-
-// ListTile _tile(String title, String subtitle, String icon, int count) {
-//   return ListTile(
-//     title: Text('$count ' + title,
-//         style: const TextStyle(
-//           fontWeight: FontWeight.w500,
-//           fontSize: 20,
-//         )),
-//     subtitle: Text(subtitle),
-//     leading: Image.network('https://image.tmdb.org/t/p/w500' + icon),
-//     trailing: Icon(Icons.arrow_forward_ios_sharp),
-//   );
-// }

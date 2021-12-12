@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rubicom_test/movies_page.dart';
-import 'package:rubicom_test/tvshows_page.dart';
+import 'package:rubicom_test/pages/movies_page.dart';
+import 'package:rubicom_test/pages/tvshows_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        primaryColor: Colors.white,
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage>
   late TabController _tabController;
   int _selectedIndex = 0;
   Color firstColor = Colors.blue;
-  Color secondColor = Colors.white;
+  Color secondColor = Colors.black;
   Icon customIcon = const Icon(Icons.search);
   Widget customSearchBar = const Text('An App');
   String searchValue = '';
@@ -62,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage>
                   customSearchBar = ListTile(
                     leading: Icon(
                       Icons.search,
-                      color: Colors.white,
+                      color: Colors.black,
                       size: 28,
                     ),
                     title: TextField(
@@ -74,14 +75,13 @@ class _MyHomePageState extends State<MyHomePage>
                       decoration: InputDecoration(
                         hintText: 'Search',
                         hintStyle: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 18,
                           fontStyle: FontStyle.italic,
                         ),
-                        border: InputBorder.none,
                       ),
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   );
@@ -99,50 +99,44 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TabBar(
-              onTap: (index){
-                print(index);
-                setState(() {
-                  if(index == 1){
-                    firstColor = Colors.white;
-                    secondColor = Colors.blue;
-                  }
-                  else{
-                    firstColor = Colors.blue;
-                    secondColor = Colors.white;
-                  }
-                });
-              },
-              unselectedLabelColor: Colors.blue,
-              labelColor: Colors.white,
-            tabs: [
-            Container(
-              decoration: BoxDecoration(
-
-                  color: firstColor,
-                  border: Border.all(color: Colors.blueAccent)
-              ),
-              child: Tab(
+            SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TabBar(
+                onTap: (index){
+                  print(index);
+                  setState(() {
+                    if(index == 1){
+                      firstColor = Colors.black;
+                      secondColor = Colors.blue;
+                    }
+                    else{
+                      firstColor = Colors.blue;
+                      secondColor = Colors.black;
+                    }
+                  });
+                },
+                unselectedLabelColor: Colors.blue,
+                labelColor: Colors.black,
+              tabs: [
+              Tab(
                 child: Align(
                   alignment: Alignment.center,
                   child: Text("Movies"),
                 ),
               ),
-            ),
-              Tab(
-                child: Container(
-                  color: secondColor,
+                Tab(
                   child: Align(
                     alignment: Alignment.center,
                     child: Text("TV Shows"),
                   ),
-                ),
 
-              ),
+                ),
           ],
           controller: _tabController,
           indicatorSize: TabBarIndicatorSize.tab,
         ),
+            ),
         Expanded(
           child: TabBarView(
             children: [
@@ -151,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage>
               )
               ,
               Container(
-                child: TVShowsPage(),
+                child: TVShowsPage(searchValue),
               )
             ],
             controller: _tabController,
